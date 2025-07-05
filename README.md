@@ -8,11 +8,11 @@ This app was done so people can organize all of the activities to be done throug
 edit and delete notes that describe what you are going to do at a certain time of the day. It saves the data through
 local storage
 
-[Software Demo Video]()
+[Software Demo Video](https://youtu.be/v8qaZdItUfw)
 
 # Development Environment
 
-For this app I used React Native, Expo and React Hook Form to help me develop this app.
+For this app I used React Native, Expo and React Hook Form to help me develop this
 
 I used Typescript as the programming language
 
