@@ -1,50 +1,22 @@
-# Welcome to your Expo app 👋
+# Overview
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Hi! this is my Daily Planning Mobile App
 
-## Get started
+It was done using React Native through Expo, also using the React Hook Form library for the forms
 
-1. Install dependencies
+This app was done so people can organize all of the activities to be done throughout the day, it allows to create,
+edit and delete notes that describe what you are going to do at a certain time of the day. It saves the data through
+local storage
 
-   ```bash
-   npm install
-   ```
+[Software Demo Video]()
 
-2. Start the app
+# Development Environment
 
-   ```bash
-   npx expo start
-   ```
+For this app I used React Native, Expo and React Hook Form to help me develop this app.
 
-In the output, you'll find options to open the app in a
+I used Typescript as the programming language
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+# Useful Websites
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+[React Native website](https://reactnative.dev/)
+[Echo bind example of React Hook Form](https://echobind.com/post/react-hook-form-for-react-native)
