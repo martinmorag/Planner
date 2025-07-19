@@ -1,29 +1,58 @@
-import { StyleSheet, View, Pressable, TextInput,Text } from 'react-native';
-import React, { useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getAuth } from 'firebase/auth';
+import { addDoc, collection, getDoc } from 'firebase/firestore';
+import React from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { db } from '../../../firebaseConfig';
+
+
+type Note = {
+  id: string,
+  hour: string,
+  note: string,
+}
+
+type Response = {
+  res: boolean,
+  new: any
+}
 
 // this function takes the hour for parameter to know which 
 // hour to work on and the ShowR which is the response to 
 // the parent component that closes the View tag when the 
 // user presses cancel or creates a new note
-function NewForm(props: { hour:string, ShowR: any }) {
+function NewForm(props: { hour:string, ShowR: any}) {
   // imports to use React Hook Form
   const { handleSubmit, control, formState: { errors } } = useForm();
-  // this function makes sure to save the note on the 
-  // right hour, using the hour as a key and the data 
-  // entered by the user as the content
+  const auth = getAuth()
+  const user = auth.currentUser
+  const notesCollection = collection(db, 'notes')
+
   const onSubmit = async (data:any) => {
-    console.log("triggered")
-    try {
-      await AsyncStorage.setItem(
-        props.hour,
-        data.note
-      ) 
-      props.ShowR(true)
-    } catch (error) {
-      console.log(error)
+    if (user) {
+      const newDoc = await addDoc(notesCollection, { hour: props.hour, note: data.note, userId: user.uid })
+      
+      const newDocR = await getDoc(newDoc)
+      let thisss : Note = {
+       id: newDoc.id,
+       hour: props.hour,
+       note: newDocR.data()?.note
+      }
+      const resss : Response = {
+        res: false,
+        new: thisss
+      }
+      props.ShowR(resss)
+      
+      console.log('success')
+    } else {
+      console.log('no user found')
     }
+  }
+
+  const defaultt : Response = {
+    res: false,
+    new: null
   }
   
   return (
@@ -55,7 +84,7 @@ function NewForm(props: { hour:string, ShowR: any }) {
         </Pressable>
         
 
-        <Pressable style={styles.Btn} onPress={() => props.ShowR(true)}><Text style={styles.BtnText}>Cancel</Text></Pressable>
+        <Pressable style={styles.Btn} onPress={() => props.ShowR(defaultt)}><Text style={styles.BtnText}>Cancel</Text></Pressable>
   </View>
   )
 }

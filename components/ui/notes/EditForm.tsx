@@ -1,41 +1,75 @@
-import { StyleSheet, View, Pressable, TextInput,Text } from 'react-native';
-import React, { useState } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { getAuth } from 'firebase/auth';
+import { collection, deleteDoc, doc, updateDoc } from 'firebase/firestore';
+import React from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { db } from '../../../firebaseConfig';
+
+type Note = {
+  id: string,
+  hour: string,
+  note: string,
+}
+
+type Response = {
+  res: boolean,
+  action: any,
+  item: any,
+}
 
 // this function takes the hour for parameter to know which 
 // hour to work on, the ShowR which is the response to 
 // the parent component that closes the View tag when the 
 // user presses cancel or creates a new note, and the note 
 // to populate the current note with the content
-function EditForm(props: { hour:string, note:string, ShowR: any }) {
+function EditForm(props: { hour:string, note:string, ShowR: any, noteId: string }) {
   // imports to use React Hook Form
   const { handleSubmit, control, formState: { errors } } = useForm();
+  console.log(props.hour)
+  const auth = getAuth()
+  const user = auth.currentUser
+  const notesCollection = collection(db, 'notes')
+
   // this function makes sure to save the note on the 
   // right hour, using the hour as a key and the data 
   // entered by the user as the content
   const onSubmit = async (data:any) => {
-    try {
-      await AsyncStorage.setItem(
-        props.hour,
-        data.note
-      ) 
-      props.ShowR(false)
-    } catch (error) {
-      console.log(error)
+    const note = doc(db, 'notes', props.noteId)
+    await updateDoc(note, {
+      note: data.note
+    })
+    const theNote : Note = {
+      id: props.noteId,
+      hour: props.hour,
+      note: data.note
     }
+    const resss : Response = {
+      res: false,
+      action: 'edit',
+      item: theNote
+    }
+
+    props.ShowR(resss)
   }
   // this function deletes the item taking the hour 
   // received as the key
-  const deleteNote = async () => {
-    try {
-      await AsyncStorage.removeItem(
-        props.hour,
-      ) 
-      props.ShowR(false)
-    } catch (error) {
-      console.log(error)
+  const deleteNote = async (id:string) => {
+    const note = doc(db, 'notes', id)
+    console.log(id)
+    await deleteDoc(note)
+    const resss : Response = {
+      res: false,
+      action: 'delete',
+      item: note.id
     }
+
+    props.ShowR(resss)
+  }
+
+  const defaultt : Response = {
+      res: false,
+      action: null,
+      item: null
   }
   
   return (
@@ -67,13 +101,13 @@ function EditForm(props: { hour:string, note:string, ShowR: any }) {
           ><Text style={styles.buttontxt}>Edit</Text>  
           </Pressable>
           <Pressable 
-            onPress={deleteNote}
+            onPress={() => deleteNote(props.noteId)}
             style={styles.deleteBtn}
           ><Text style={styles.buttontxt}>Delete</Text>  
           </Pressable>
         </View>
 
-        <Pressable style={styles.Btn} onPress={() => props.ShowR(false)}><Text style={styles.BtnText}>Cancel</Text></Pressable>
+        <Pressable style={styles.Btn} onPress={() => props.ShowR(defaultt)}><Text style={styles.BtnText}>Cancel</Text></Pressable>
   </View>
   )
 }

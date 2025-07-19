@@ -4,7 +4,10 @@ import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 
+
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { useState } from 'react';
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -17,12 +20,30 @@ export default function RootLayout() {
     return null;
   }
 
+  const [session, setSession] = useState(false)
+  const auth = getAuth();
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      const uid = user.uid;
+      setSession(true)
+    } else {
+      setSession(false)
+    }
+  });
+
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        {/* Here changed from (tabs) to index in name since I am using only one screen */}
-        <Stack.Screen name="index" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
+      <Stack
+      screenOptions={{
+      headerShown: false,
+      }}>
+        <Stack.Protected guard={session}>
+          <Stack.Screen name="(app)" />
+        </Stack.Protected>
+
+        <Stack.Protected guard={!session}>
+          <Stack.Screen name="index" />
+        </Stack.Protected>
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>
