@@ -1,22 +1,32 @@
 # Overview
 
-Hi! this is my Daily Planning Mobile App
+Hi! This is my Planner developed in Expo React Native
 
-It was done using React Native through Expo, also using the React Hook Form library for the forms
+This is a mobile app and uses firebase as the cloud database, it has authentication by email and password and database storage implemeted for storing the notes that will go in the planner, it allows the user to see the notes for each hour of the day, insert notes, edit notes and delete notes. Everything reflected in the firebase database as it happens.
 
-This app was done so people can organize all of the activities to be done throughout the day, it allows to create,
-edit and delete notes that describe what you are going to do at a certain time of the day. It saves the data through
-local storage
+This mobile app is made to help people store their activities for every hour of the day, and allow the users change their plan for the day as well.
 
-[Software Demo Video](https://youtu.be/v8qaZdItUfw)
+[Software Demo Video](https://youtu.be/A2sOObArT7s)
+
+# Cloud Database
+
+I used firebase for authentication and storage.
+
+Firebase's authentication uses email and password to allow users log in, and the notes for the planner are stored in a notes table in the firebase database, every note has an id, the hour of the day, the content of the note and the userId.
 
 # Development Environment
 
-For this app I used React Native, Expo and React Hook Form to help me develop this
+For the development of this mobile app I used a previous project of a planner that I had but was using localstorage only, I implemented firebase with the firebase SDK.
 
-I used Typescript as the programming language
+I used typescript for the development and firebase is the only library that I used for this app.
 
 # Useful Websites
 
-[React Native website](https://reactnative.dev/)
-[Echo bind example of React Hook Form](https://echobind.com/post/react-hook-form-for-react-native)
+- [How to use Firebase in Expo](https://docs.expo.dev/guides/using-firebase/)
+- [Firebase documentation](https://firebase.google.com/docs?hl=es-419)
+
+# Future Work
+
+- The style can be improved for a more modern one in the future
+- The notes structure can be changed so the user can choose how much time one activity will take
+- A registration can be implemented in the future
