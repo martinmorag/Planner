@@ -1,9 +1,9 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
-
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
@@ -30,9 +30,10 @@ export default function RootLayout() {
       setSession(false)
     }
   });
+const Stackk = createNativeStackNavigator();
 
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>      
       <Stack
       screenOptions={{
       headerShown: false,

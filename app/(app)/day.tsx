@@ -2,6 +2,7 @@ import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 import EditForm from '@/components/ui/notes/EditForm';
 import NewForm from '@/components/ui/notes/NewForm';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { getAuth } from 'firebase/auth';
 import { collection, getDocs, query, where } from 'firebase/firestore';
 import { useEffect, useState } from 'react';
@@ -14,13 +15,18 @@ const hundredWidth = Dimensions.get('window').width
 
 type Note = {
   id: string,
+  day: string,
   hour: string,
   note: string,
 }
 
 
 
-export default function HomeScreen() {  
+export default function Day() {  
+  const { dayy } = useLocalSearchParams();
+
+  const [day, setDay] = useState('')
+
   // useState for showing the new note form
   const [Show, setShow] = useState(false)
   // useState for showing the edit note form
@@ -58,6 +64,7 @@ export default function HomeScreen() {
   const handlePress = (hour: string) => {
     setShow(true)
     setNewHour(hour)
+    setDay(dayy[0])
   }
   // this function shows the View tag, the content of 
   // the current note and the time on the note that 
@@ -78,6 +85,7 @@ export default function HomeScreen() {
             [  ...dictionary,
               {
                 id: showR.new.id, 
+                day: showR.new.day,
                 hour: showR.new.hour, 
                 note: showR.new.note 
               }
@@ -85,6 +93,7 @@ export default function HomeScreen() {
           )
     }
     setNewHour('')
+    setDay('')
   }
   // this function handles the response from a current
   // note being edited
@@ -120,14 +129,12 @@ export default function HomeScreen() {
         const qry = query(notesCollection, where("userId", "==", user.uid));
         const data = await getDocs(qry)
         data.forEach(note => {  
-          console.log("Hour stored: " + note.data().hour)
           setDic(
             dictionary =>
             [  ...dictionary,
-              {id: note.id, hour: note.data().hour, note: note.data().note  }
+              {id: note.id, day: note.data().day, hour: note.data().hour, note: note.data().note  }
             ]
           )
-          //setDic(map => new Map(map.set(note.data().hour, { id: note.id, note: note.data().note })))
         }) 
          
         setLoading(false)
@@ -136,14 +143,17 @@ export default function HomeScreen() {
     fetchNotes()
   }, [])
 
-  
+  const router = useRouter();
   
   return (
     <SafeAreaProvider style={{ width:hundredWidth}}>
       <SafeAreaView style={styles.container} >
       <ThemedView style={styles.titleContainer}>
         <View style={{ width: hundredWidth }}>
-          <ThemedText type="title" style={styles.title}>My daily plan</ThemedText>
+          <TouchableOpacity onPress={() => router.push('/(app)/(tabs)')} style={styles.backBtn}>
+            <Text style={styles.backBtnTxt}>Go back to my week</Text>
+          </TouchableOpacity>
+          <ThemedText type="title" style={styles.title}>My plan for today | {dayy[0]}</ThemedText>
           <TouchableOpacity style={styles.signout} onPress={() => auth.signOut()}>
             <Text style={styles.signouTxt}>Sign Out</Text>
           </TouchableOpacity>
@@ -165,7 +175,7 @@ export default function HomeScreen() {
                         style={styles.hourBtn}
                         onPress={() => handlePress(hour)}
                       >
-                        {dic.filter(x => x.hour == hour).map(y => <Pressable style={styles.Note} onPress={() => handlePressEdit(y.hour, y.note, y.id)}><Text style={styles.NoteTxt}>{y.note}</Text></Pressable>)}
+                        {dic.filter(x => x.hour == hour && x.day == dayy[0]).map(y => <Pressable style={styles.Note} onPress={() => handlePressEdit(y.hour, y.note, y.id)}><Text style={styles.NoteTxt}>{y.note}</Text></Pressable>)}
                       </Pressable> 
                     </View>
             })}
@@ -174,7 +184,7 @@ export default function HomeScreen() {
       )}
       
       {/* New View for the creation of the note */}
-      {Show && (<NewForm hour={NewHour} ShowR={handleResShow} />)}
+      {Show && (<NewForm day={day} hour={NewHour} ShowR={handleResShow} />)}
       {/* Edit View for the edit of the note */}
       {EditShow && (<EditForm hour={EditHour} note={note} noteId={noteId} ShowR={handleEditShow} />)}
     </SafeAreaView>
@@ -221,6 +231,24 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 42,
     padding: 12,
+  },
+
+
+  backBtn: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: 150,
+    height: 40,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 20,
+    backgroundColor: '#9CBFA7',
+    borderRadius: 5,
+  },
+  backBtnTxt: {
+    color: '#000000ff',
   },
 
 

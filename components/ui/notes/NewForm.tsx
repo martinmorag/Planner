@@ -8,6 +8,7 @@ import { db } from '../../../firebaseConfig';
 
 type Note = {
   id: string,
+  day: string,
   hour: string,
   note: string,
 }
@@ -21,7 +22,7 @@ type Response = {
 // hour to work on and the ShowR which is the response to 
 // the parent component that closes the View tag when the 
 // user presses cancel or creates a new note
-function NewForm(props: { hour:string, ShowR: any}) {
+function NewForm(props: { day: string, hour:string, ShowR: any}) {
   // imports to use React Hook Form
   const { handleSubmit, control, formState: { errors } } = useForm();
   const auth = getAuth()
@@ -30,11 +31,12 @@ function NewForm(props: { hour:string, ShowR: any}) {
 
   const onSubmit = async (data:any) => {
     if (user) {
-      const newDoc = await addDoc(notesCollection, { hour: props.hour, note: data.note, userId: user.uid })
+      const newDoc = await addDoc(notesCollection, { day: props.day, hour: props.hour, note: data.note, userId: user.uid })
       
       const newDocR = await getDoc(newDoc)
       let thisss : Note = {
        id: newDoc.id,
+       day: props.day,
        hour: props.hour,
        note: newDocR.data()?.note
       }
