@@ -6,7 +6,7 @@ It's a mobile app that allow people to record activites that they are planning t
 
 My purpose for creating this app was to help people be more organized, this was also aiming to help people remember the things that they needed to do so they don't miss a deadline.
 
-[Software Demo Video](https://youtu.be/A2sOObArT7s)
+[Software Demo Video](https://youtu.be/YawSNQdHCBk)
 
 # Development Environment
 

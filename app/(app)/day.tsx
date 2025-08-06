@@ -64,7 +64,7 @@ export default function Day() {
   const handlePress = (hour: string) => {
     setShow(true)
     setNewHour(hour)
-    setDay(dayy[0])
+    setDay(dayy.toString())
   }
   // this function shows the View tag, the content of 
   // the current note and the time on the note that 
@@ -153,7 +153,7 @@ export default function Day() {
           <TouchableOpacity onPress={() => router.push('/(app)/(tabs)')} style={styles.backBtn}>
             <Text style={styles.backBtnTxt}>Go back to my week</Text>
           </TouchableOpacity>
-          <ThemedText type="title" style={styles.title}>My plan for today | {dayy[0]}</ThemedText>
+          <ThemedText type="title" style={styles.title}>My plan for today | {dayy.toString()}</ThemedText>
           <TouchableOpacity style={styles.signout} onPress={() => auth.signOut()}>
             <Text style={styles.signouTxt}>Sign Out</Text>
           </TouchableOpacity>
@@ -175,7 +175,7 @@ export default function Day() {
                         style={styles.hourBtn}
                         onPress={() => handlePress(hour)}
                       >
-                        {dic.filter(x => x.hour == hour && x.day == dayy[0]).map(y => <Pressable style={styles.Note} onPress={() => handlePressEdit(y.hour, y.note, y.id)}><Text style={styles.NoteTxt}>{y.note}</Text></Pressable>)}
+                        {dic.filter(x => x.hour == hour && x.day == dayy.toString()).map(y => <Pressable style={styles.Note} onPress={() => handlePressEdit(y.hour, y.note, y.id)}><Text style={styles.NoteTxt}>{y.note}</Text></Pressable>)}
                       </Pressable> 
                     </View>
             })}
